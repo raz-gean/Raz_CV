@@ -1,26 +1,287 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
   }
 }
 
+:root {
+  --paper: #f1f2f6;
+  --sheet: #ffffff;
+  --ink: #16203a;
+  --ink-2: #4a5470;
+  --rule: rgb(22 32 58 / 0.14);
+  --cobalt: #2b44d4;
+  --hl: #e6f53d;
+  --hl-ink: #16203a;
+  --hl-stroke: #e6f53d;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d1325;
+    --sheet: #141b31;
+    --ink: #e7e9f2;
+    --ink-2: #a3aac2;
+    --rule: rgb(231 233 242 / 0.14);
+    --cobalt: #93a1ff;
+    --hl: #e6f53d;
+    --hl-ink: #0d1325;
+    --hl-stroke: #56620f;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #0d1325;
+  --sheet: #141b31;
+  --ink: #e7e9f2;
+  --ink-2: #a3aac2;
+  --rule: rgb(231 233 242 / 0.14);
+  --cobalt: #93a1ff;
+  --hl: #e6f53d;
+  --hl-ink: #0d1325;
+  --hl-stroke: #56620f;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-sheet: var(--sheet);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-rule: var(--rule);
+  --color-cobalt: var(--cobalt);
+  --color-hl: var(--hl);
+  --color-hl-ink: var(--hl-ink);
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-feature-settings: "kern", "liga";
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background: var(--hl);
+  color: var(--hl-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+}
+
+@layer components {
+/* Wide display type: Archivo's width axis does the heavy lifting. */
+.type-wide {
+  font-stretch: 125%;
+  letter-spacing: -0.02em;
+}
+
+.type-semi {
+  font-stretch: 112%;
+}
+
+/* ---------------------------------------------------------------
+   Highlighter
+   .mark   = full-height marker behind inline text
+   .stroke = lower-third marker under a heading
+   Both sweep in when an ancestor [data-hl-root] gets data-seen.
+---------------------------------------------------------------- */
+.mark {
+  background-image: linear-gradient(100deg, var(--hl) 0%, var(--hl) 96%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  background-position: 0 0;
+  border-radius: 0.18em 0.45em 0.3em 0.5em;
+  padding: 0.02em 0.22em;
+  margin: 0 -0.08em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition:
+    background-size 0.65s cubic-bezier(0.65, 0.05, 0.25, 1),
+    color 0.3s ease;
+  transition-delay: var(--hl-delay, 0ms);
+}
+
+.stroke {
+  background-image: linear-gradient(var(--hl-stroke), var(--hl-stroke));
+  background-repeat: no-repeat;
+  background-size: 0% 0.42em;
+  background-position: 0 88%;
+  padding: 0 0.12em;
+  margin: 0 -0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 0.7s cubic-bezier(0.65, 0.05, 0.25, 1) 0.1s;
+}
+
+[data-seen] .mark,
+html:not(.js) .mark {
+  background-size: 100% 100%;
+  color: var(--hl-ink);
+}
+
+[data-seen] .stroke,
+html:not(.js) .stroke {
+  background-size: 100% 0.42em;
+}
+
+/* ---------------------------------------------------------------
+   Cover load sequence: the one orchestrated moment on the page.
+---------------------------------------------------------------- */
+.rise {
+  display: block;
+  overflow: hidden;
+}
+
+.rise > span {
+  display: block;
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.8s ease both;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.photo-drop {
+  animation: photo-drop 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) 0.25s both;
+}
+
+@keyframes photo-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-18px) rotate(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(2.5deg);
+  }
+}
+
+.tape {
+  background: color-mix(in srgb, var(--hl) 78%, transparent);
+}
+
+/* Project filter: items being hidden collapse out of the grid. */
+.project-card[hidden] {
+  display: none;
+}
+
+.project-card {
+  animation: fade-in 0.35s ease both;
+}
+
+/* Scrollable mobile nav without a visible scrollbar */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Print / Save as PDF
+---------------------------------------------------------------- */
+@media print {
+  :root,
+  :root[data-theme="dark"] {
+    --paper: #ffffff;
+    --sheet: #ffffff;
+    --ink: #16203a;
+    --ink-2: #4a5470;
+    --rule: rgb(22 32 58 / 0.18);
+    --cobalt: #2b44d4;
+    --hl-ink: #16203a;
+    --hl-stroke: #e6f53d;
+  }
+  html {
+    font-size: 12px;
+  }
+  body {
+    background: #fff;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .mark,
+  .stroke {
+    background-size: 100% 100% !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .stroke {
+    background-size: 100% 0.42em !important;
+  }
+  .print-avoid {
+    break-inside: avoid;
+  }
+  section {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+  a {
+    text-decoration: none;
+  }
+  .project-card[hidden] {
+    display: block !important;
+  }
 }
