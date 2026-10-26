@@ -1,4 +1,4 @@
-# Gean T. Raz — CV website
+# Gean T. Raz - CV website
 
 Personal CV website built with Next.js 16, React 19 and Tailwind CSS 4, deployed on Vercel.
 
@@ -23,7 +23,3 @@ npm run dev
 ```
 
 Open http://localhost:3000.
-
-## Deploying
-
-Push to GitHub, then import the repository at https://vercel.com/new. No environment variables are needed.
