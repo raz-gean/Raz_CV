@@ -51,7 +51,7 @@ export function Section({
 
 export function Cover() {
   return (
-    <header id="profile" data-hl-root className="mx-auto max-w-[1200px] px-4 sm:px-8">
+    <header id="profile" data-hl-root className="mx-auto max-w-300 px-4 sm:px-8">
       <div className="flex items-center justify-between gap-4 border-b border-rule py-4">
         <p className="text-sm">
           <span className="font-semibold">{profile.name}</span>
@@ -104,10 +104,10 @@ export function Cover() {
           </div>
         </div>
 
-        <figure className="photo-drop relative order-first w-[min(52vw,220px)] sm:w-[260px] lg:order-none lg:mb-4 lg:w-[340px]">
+        <figure className="photo-drop relative order-first w-[min(52vw,220px)] sm:w-65 lg:order-0 lg:mb-4 lg:w-85">
           <span
             aria-hidden
-            className="tape absolute -top-3 left-1/2 z-10 h-7 w-28 -translate-x-1/2 -rotate-6 rounded-[2px]"
+            className="tape absolute -top-3 left-1/2 z-10 h-7 w-28 -translate-x-1/2 -rotate-6 rounded-xs"
           />
           <div className="overflow-hidden rounded-[3px] border-[7px] border-sheet bg-sheet shadow-[0_22px_45px_-22px_rgb(22_32_58/0.55)]">
             <Image
@@ -415,7 +415,7 @@ export function Experience() {
           <li key={x.role} className="print-avoid relative pb-12 pl-8 last:pb-0">
             <span
               aria-hidden
-              className={`absolute top-2 -left-[7px] size-3.5 rounded-full border-2 border-paper ${i === 0 ? "bg-hl ring-1 ring-ink/40" : "bg-cobalt"}`}
+              className={`absolute top-2 -left-1.75 size-3.5 rounded-full border-2 border-paper ${i === 0 ? "bg-hl ring-1 ring-ink/40" : "bg-cobalt"}`}
             />
             <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
               <h3 className="type-semi text-xl font-bold">{x.role}</h3>
@@ -564,7 +564,7 @@ export function RailDetails() {
 export function Footer() {
   return (
     <footer className="border-t border-rule">
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 px-4 py-8 text-sm text-ink-2 sm:px-8">
+      <div className="mx-auto flex max-w-300 flex-wrap items-center justify-between gap-4 px-4 py-8 text-sm text-ink-2 sm:px-8">
         <p>&copy; 2026 {profile.name}. Built with Next.js and deployed on Vercel.</p>
         <a href="#profile" className="no-print font-medium text-ink hover:underline">
           Back to top

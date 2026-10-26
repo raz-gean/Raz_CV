@@ -39,7 +39,7 @@ export default function Home() {
 
       <Cover />
 
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-8 lg:grid lg:grid-cols-[13rem_1fr] lg:gap-16">
+      <div className="mx-auto max-w-300 px-4 sm:px-8 lg:grid lg:grid-cols-[13rem_1fr] lg:gap-16">
         <aside className="no-print sticky top-0 z-20 -mx-4 self-start border-y border-rule bg-paper/90 px-4 py-2 backdrop-blur-md sm:-mx-8 sm:px-8 lg:top-0 lg:mx-0 lg:border-0 lg:bg-transparent lg:px-0 lg:py-14 lg:backdrop-blur-none">
           <SectionNav items={nav} />
           <RailDetails />
